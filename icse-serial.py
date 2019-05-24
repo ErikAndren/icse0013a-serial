@@ -5,11 +5,12 @@ import time
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-o', '--on_relay', type = int)
+parser.add_argument('-o', '--on_relay', type = int, help = 'relay to turn on')
+parser.add_argument('-d', '--device', help = 'serial device to turn on', default = '/dev/serial0')
 
 args = parser.parse_args()
 
-ser = serial.Serial('/dev/cu.usbserial-00000000', 9600, timeout = 1)
+ser = serial.Serial(args.device, 9600, timeout = 1)
 
 #reply = b''
 #while reply == b'':
