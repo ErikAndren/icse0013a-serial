@@ -3,52 +3,42 @@
 import serial
 import time
 import argparse
+import sys
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-o', '--on_relay', type = int, help = 'relay to turn on')
-parser.add_argument('-f', '--off_relay', type = int, help = 'relay to turn off')
+parser.add_argument('-o', '--on_relay', type = str, help = 'relay to turn on (1, 2, 12')
+parser.add_argument('-f', '--off_relay', type = str, help = 'relay to turn off (1, 2, 12')
 parser.add_argument('-d', '--device', help = 'serial device to turn on', default = '/dev/serial0')
 
 args = parser.parse_args()
 
 ser = serial.Serial(args.device, 9600, timeout = 1)
 
-#reply = b''
-#while reply == b'':
-ser.write(b'\x50')
-time.sleep(0.5)
+def prepare_relay():
+    ser.write(b'\x50')
+    time.sleep(0.5)
+    ser.write(b'\x51')
+    ser.write(b'\x00')
+
+#ser.write(b'\x50')
+#time.sleep(0.5)
 #    reply = ser.read()
 # print ('Got: ', reply)
 # if reply != b'\xad':
 #     print ('Did not receive a supported device, got: ', reply)
 #     exit(-1)
 
-ser.write(b'\x51')
-
-#if args.on_relay == 0:
-#    ser.write(b'\x02')
-#else:
-#    print ('invalid args')
-#    ser.write(b'\xFF')
-
-#elif args.on_relay == 1:
-#    ser.write(b'\x02')
-
-#
-
-# K1 = bit 0, active high
-# K2 = bit 1, active high
-
-while True:
-    # Turn off K1
-    ser.write(b'\x02')
-    time.sleep(1)
-    # Turn off K2
+if args.on_relay == '1':
+    prepare_relay()
 #    ser.write(b'\x00')
-#    time.sleep(1)
-    # Turn on K1
+    ser.write(b'\x01')
+elif args.on_relay == '2':
+    prepare_relay()
+    ser.write(b'\x02')
+elif args.on_relay == '12':
+    prepare_relay()
+    ser.write(b'\x03')
+
+elif args.off_relay != None:
+    prepare_relay()
     ser.write(b'\x00')
-#    time.sleep(1)
-    # Turn on both relays
-#    ser.write(b'\x03')
-    time.sleep(3)
