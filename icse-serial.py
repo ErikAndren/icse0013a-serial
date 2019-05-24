@@ -6,6 +6,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-o', '--on_relay', type = int, help = 'relay to turn on')
+parser.add_argument('-f', '--off_relay', type = int, help = 'relay to turn off')
 parser.add_argument('-d', '--device', help = 'serial device to turn on', default = '/dev/serial0')
 
 args = parser.parse_args()
